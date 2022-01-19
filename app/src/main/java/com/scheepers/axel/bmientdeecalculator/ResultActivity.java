@@ -40,11 +40,11 @@ public class ResultActivity extends AppCompatActivity {
             tdee -= 161;
         }
         switch (spinnerIndex) {
-            case 0: tdee *= 1.200;   break;
+            case 0: tdee *= 1.200; break;
             case 1: tdee *= 1.375; break;
-            case 2: tdee *= 1.550;  break;
+            case 2: tdee *= 1.550; break;
             case 3: tdee *= 1.725; break;
-            case 4: tdee *= 1.900;   break;
+            case 4: tdee *= 1.900; break;
         }
 
         bmi = (double) weight / ((height / 100.0) * (height / 100.0));
