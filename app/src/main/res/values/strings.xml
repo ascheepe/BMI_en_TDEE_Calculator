@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">BMI en TDEE Calculator</string>
+
+    <string name="my_data">Mijn gegevens</string>
+
+    <string name="sex">Geslacht</string>
+    <string name="male">Man</string>
+    <string name="female">Vrouw</string>
+
+    <string name="activity">Hoevaak sport u per week?</string>
+    <string-array name="activityLevel">
+        <item>Niet</item>
+        <item>1 tot 2x</item>
+        <item>3 tot 5x</item>
+        <item>6 tot 7x</item>
+        <item>Meer dan 7x</item>
+    </string-array>
+
+    <string name="age">Leeftijd</string>
+    <string name="height">Lengte (cm)</string>
+    <string name="weight">Gewicht (kg)</string>
+
+    <string name="next">Volgende</string>
+
+    <string name="results">Mijn resultaten</string>
+    <string name="extreme_underweight">Het gewicht is extreem veel te laag.</string>
+    <string name="much_underweight">Het gewicht is veel te laag.</string>
+    <string name="underweight">Het gewicht is te laag.</string>
+    <string name="normal">Het gewicht is normaal.</string>
+    <string name="overweight">"Het gewicht is te hoog."</string>
+    <string name="much_overweight">"Het gewicht is veel te hoog."</string>
+    <string name="extreme_overweight">"Het gewicht is extreem veel te hoog."</string>
+    <string name="morbid_obesity">"Morbide obesitas"</string>
+
+    <string name="bmi">BMI</string>
+    <string name="tdee">TDEE</string>
+    <string name="kcal_per_day">kcal/dag</string>
+    <string name="target_weight">STREEFGEWICHT</string>
+    <string name="kg">kg</string>
+
+    <string name="data_retrieve_error">Er vond een probleem plaats bij het ophalen van uw gegevens.</string>
+</resources>

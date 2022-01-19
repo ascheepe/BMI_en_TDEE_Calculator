@@ -1,0 +1,2 @@
+rootProject.name = "BMI en TDEE Calculator"
+include ':app'
