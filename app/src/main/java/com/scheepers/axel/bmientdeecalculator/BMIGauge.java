@@ -84,12 +84,12 @@ public class BMIGauge extends View {
                 gradientColors, gradientPositions, Shader.TileMode.CLAMP);
         gradientPaint.setShader(gradient);
 
-        gaugeRect = new Rect(0, 0, (int) width, (int) height);
-        innerGaugeRect = new Rect(strokeWidth, strokeWidth, (int) (width - strokeWidth),
-                (int) (height - strokeWidth));
+        gaugeRect = new Rect(0, 0, (int) width - 1, (int) height - 1);
+        innerGaugeRect = new Rect(strokeWidth, strokeWidth, (int) width - strokeWidth - 1,
+                (int) height - strokeWidth - 1);
 
         markerPosX = bmi * bmiScale;
-        markerPosY = height;
+        markerPosY = height - 1;
     }
 
     protected void onDraw(Canvas canvas) {
