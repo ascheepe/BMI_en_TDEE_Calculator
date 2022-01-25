@@ -86,7 +86,7 @@
         <com.scheepers.axel.bmientdeecalculator.BMIGauge
             android:id="@+id/BMIGauge"
             android:layout_width="match_parent"
-            android:layout_height="28dp"
+            android:layout_height="50dp"
             android:layout_weight="1" />
     </LinearLayout>
 
