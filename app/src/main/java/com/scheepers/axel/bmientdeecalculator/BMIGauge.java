@@ -2,39 +2,24 @@ package com.scheepers.axel.bmientdeecalculator;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 
-import java.util.Locale;
-
 public class BMIGauge extends View {
-    private final float perfectBmi = (float) 21.75;
     private final float bmiGaugeMin = 10;
     private final float bmiGaugeMax = 50;
-    private final float scale = (float) 1.0 / (bmiGaugeMax - bmiGaugeMin);
-    private float bmiScale;
 
-    private float width;
-    private float height;
-
-    private Paint gaugePaint;
-    private Paint gradientPaint;
+    private Paint gaugePaint, redPaint, yellowPaint, greenPaint;
     private Paint markerPaint;
-    private Paint textPaint;
 
-    private final int strokeWidth = 4;
     private Rect gaugeRect;
-    private Rect innerGaugeRect;
-    private Rect textBounds;
+    private Rect wayTooLowRect, tooLowRect, okRect, tooHighRect, wayTooHighRect;
+
     private float markerPosX, markerPosY;
 
     private float bmi;
-
-    private boolean validSize;
 
     public BMIGauge(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -46,23 +31,21 @@ public class BMIGauge extends View {
         gaugePaint.setColor(0xff000000);
         gaugePaint.setStyle(Paint.Style.FILL);
 
-        gradientPaint = new Paint();
-        gradientPaint.setStyle(Paint.Style.FILL);
+        redPaint = new Paint();
+        redPaint.setColor(0xff7f0000);
+        yellowPaint = new Paint();
+        yellowPaint.setColor(0xff7f7f00);
+        greenPaint = new Paint();
+        greenPaint.setColor(0xff007f00);
 
         markerPaint = new Paint();
         markerPaint.setColor(0xff000000);
         markerPaint.setStyle(Paint.Style.STROKE);
+
+        int strokeWidth = 4;
         markerPaint.setStrokeWidth(strokeWidth);
 
-        textPaint = new Paint();
-        textPaint.setColor(0xff000000);
-        textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setStrokeWidth(5);
-        textPaint.setTextSize(25);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        textBounds = new Rect();
-
-        bmi = perfectBmi;
+        bmi = (float) 21.75;
     }
 
     public void setBmi(float newBmi) {
@@ -75,77 +58,41 @@ public class BMIGauge extends View {
     }
 
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
-        width = w - (float)(getPaddingLeft() + getPaddingRight());
-        height = h - (float)(getPaddingTop() + getPaddingBottom());
+        float width = w - (float)(getPaddingLeft() + getPaddingRight());
+        float height = h - (float)(getPaddingTop() + getPaddingBottom());
+        float scale = width / (bmiGaugeMax - bmiGaugeMin);
 
-        if (width < 150 || height < 75) {
-            validSize = false;
-            return;
-        }
-
-        validSize = true;
-        bmiScale = width / (bmiGaugeMax - bmiGaugeMin);
-
-        int[] gradientColors = {
-                0xffff0000,
-                0xffffff00,
-                0xff00ff00,
-                0xffffff00,
-                0xffff0000
+        int bottom = (int) height - 1;
+        int end = (int) width - 1;
+        int[] pos = {
+                (int) ((17 - bmiGaugeMin) * scale),
+                (int) ((18.5 - bmiGaugeMin) * scale),
+                (int) ((25 - bmiGaugeMin) * scale),
+                (int) ((30 - bmiGaugeMin) * scale),
+                (int) ((35 - bmiGaugeMin) * scale),
         };
 
-        float[] gradientPositions = {
-                0,
-                (float) (((17 + 18.5) / 2.0 - bmiGaugeMin) * scale),
-                (float) (21.75 - bmiGaugeMin) * scale,
-                (float) (((25 + 30) / 2.0 - bmiGaugeMin) * scale),
-                1
-        };
+        gaugeRect = new Rect(0, 0, end, bottom);
 
-        LinearGradient gradient = new LinearGradient((float) 0, (float) 0, width, (float) 0,
-                gradientColors, gradientPositions, Shader.TileMode.CLAMP);
-        gradientPaint.setShader(gradient);
+        wayTooLowRect = new Rect( 0, 0, pos[0], bottom);
+        tooLowRect = new Rect(pos[0], 0, pos[1], bottom);
+        okRect = new Rect(pos[1], 0, pos[2], bottom);
+        tooHighRect = new Rect(pos[2], 0, pos[3], bottom);
+        wayTooHighRect = new Rect(pos[3], 0, end, bottom);
 
-        gaugeRect = new Rect(0, 0, (int) width - 1, (int) height - 1);
-        //noinspection SuspiciousNameCombination
-        innerGaugeRect = new Rect(strokeWidth, strokeWidth, (int) width - strokeWidth - 1,
-                (int) height - strokeWidth - 1);
-
-        markerPosX = (bmi - bmiGaugeMin) * bmiScale;
+        markerPosX = (bmi - bmiGaugeMin) * scale;
         markerPosY = height - 1;
     }
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (!validSize) {
-            return;
-        }
-
         canvas.drawRect(gaugeRect, gaugePaint);
-        canvas.drawRect(innerGaugeRect, gradientPaint);
+        canvas.drawRect(wayTooLowRect, redPaint);
+        canvas.drawRect(tooLowRect, yellowPaint);
+        canvas.drawRect(okRect, greenPaint);
+        canvas.drawRect(tooHighRect, yellowPaint);
+        canvas.drawRect(wayTooHighRect, redPaint);
         canvas.drawLine(markerPosX, (float) 0, markerPosX, markerPosY, markerPaint);
-
-        for (int i = (int) bmiGaugeMin + 5; i < (int) bmiGaugeMax - 5; ++i) {
-            if (i % 10 == 0) {
-                canvas.drawLine((i - bmiGaugeMin) * bmiScale, height - 1,
-                        (i - bmiGaugeMin) * bmiScale,
-                        height - 21, markerPaint);
-                canvas.drawLine((i - bmiGaugeMin) * bmiScale, 0,
-                        (i - bmiGaugeMin) * bmiScale,
-                        20, markerPaint);
-                String text = String.format(Locale.getDefault(), "%d", i);
-
-                textPaint.getTextBounds(text, 0, text.length(), textBounds);
-                canvas.drawText(text, (i - bmiGaugeMin) * bmiScale,
-                        height / (float) 2.0 + textBounds.height() / (float) 2.0,
-                        textPaint);
-            } else if (i % 5 == 0) {
-                canvas.drawLine(i * bmiScale, height - 1, i * bmiScale,
-                        height - 11, markerPaint);
-                canvas.drawLine(i * bmiScale, 0, i * bmiScale,
-                        10, markerPaint);
-            }
-        }
     }
 }
