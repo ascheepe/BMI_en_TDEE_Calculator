@@ -19,7 +19,6 @@ public class ResultActivity extends AppCompatActivity {
         TextView textViewTDEEResult = findViewById(R.id.textViewTDEEResult);
         TextView textViewTargetWeightResult = findViewById(R.id.textViewTargetWeightResult);
         TextView textViewDetails = findViewById(R.id.textViewDetails);
-        BMIGauge bmiGauge = findViewById(R.id.BMIGauge);
 
         Intent intent = getIntent();
         long age = intent.getLongExtra("AGE", -1);
@@ -75,7 +74,5 @@ public class ResultActivity extends AppCompatActivity {
         } else {
             textViewDetails.setText(R.string.morbid_obesity);
         }
-
-        bmiGauge.setBmi((float)bmi);
     }
 }
